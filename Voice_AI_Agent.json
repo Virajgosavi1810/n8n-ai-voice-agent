@@ -1,0 +1,465 @@
+{
+  "name": "Voice AI-Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "72707ae9-875c-4a64-80f2-e821674cb7c3",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -280,
+        -100
+      ],
+      "id": "b0c16aef-546b-4143-ba29-5d9145c9d0ab",
+      "name": "Webhook",
+      "webhookId": "72707ae9-875c-4a64-80f2-e821674cb7c3"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"{{ JSON.stringify($json.output).replace(/(^\\\"|\\\"$)/g, '')}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        300,
+        -100
+      ],
+      "id": "5ce459a7-4fe3-4659-ab41-31a242f37e01",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -280,
+        140
+      ],
+      "id": "896678df-b340-477c-9e82-cacd84d5cf55",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "1VMKjiSJqADW5yc4",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -140,
+        180
+      ],
+      "id": "82dc0281-e9d5-4d09-a481-4468b5a55d6e",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "e8wVIzuOXtMjC9YW",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "aisaasdeveloper@gmail.com",
+          "mode": "list",
+          "cachedResultName": "aisaasdeveloper@gmail.com"
+        },
+        "start": "={{ $fromAI(\"startTime\") }}",
+        "end": "={{ $fromAI(\"endTime\") }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $fromAI('attendee') }}"
+          ],
+          "summary": "={{ $fromAI(\"eventTitle\") }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        240
+      ],
+      "id": "a50b5fcb-f0af-467d-8715-52f04b80f992",
+      "name": "Appointments",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "D1AA9CtPKMZPvf43",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "aisaasdeveloper@gmail.com",
+          "mode": "list",
+          "cachedResultName": "aisaasdeveloper@gmail.com"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $fromAI(\"ondDayBefore\" , \"one day before the date the user requested\") }}",
+        "timeMax": "={{ $fromAI(\"ondDayAfter\" , \"one day after the date the user requested\") }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        180
+      ],
+      "id": "173c54f4-2bfd-442c-994b-e3b938f9760b",
+      "name": "Availability",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "D1AA9CtPKMZPvf43",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MjOv3aZdBtX2QJQZH54PO76pjPk776Ce90jD1IHAuE0",
+          "mode": "list",
+          "cachedResultName": "Leads Qualification",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MjOv3aZdBtX2QJQZH54PO76pjPk776Ce90jD1IHAuE0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 494374712,
+          "mode": "list",
+          "cachedResultName": "Contacts - supporting voice agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MjOv3aZdBtX2QJQZH54PO76pjPk776Ce90jD1IHAuE0/edit#gid=494374712"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $fromAI('name')}}",
+            "Email": "{{ $fromAI('email')}}",
+            "Phone Number": "{{ $fromAI('phone')}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        320,
+        160
+      ],
+      "id": "4502c929-97de-45eb-abde-712b00662e17",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jZnh1sek0aDJgXgc",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "AIautomationFAQ",
+        "description": "Retrieves data about [insert information about your data here]..."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        460,
+        160
+      ],
+      "id": "9c4156f0-dd7b-456c-ad03-c445aaadbadf",
+      "name": "Vector Store Tool"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        380
+      ],
+      "id": "e03f3da5-b7d8-4edc-97cc-57487ee4b4ee",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "1VMKjiSJqADW5yc4",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        540
+      ],
+      "id": "e256cc5a-8872-47b0-9675-09d1cfd5a270",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "1VMKjiSJqADW5yc4",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User request: {{ $json.query.requests }}\n\nUser information:\n- Name: {{ $json.body.name || 'Not provided' }}\n- Email: {{ $json.body.email || 'Not provided' }}\n- Phone: {{ $json.body.phone || 'Not provided' }}\n- Date: {{ $json.body.date || 'Not provided' }}\n- Time: {{ $json.body.time || 'Not provided' }}",
+        "options": {
+          "systemMessage": "=You are a customer support AI Agent designed to handle various tasks efficiently. Your primary role is to check for available times for appointments, book appointments, grab contact information, and help retrieve information that is requested for the user. You have access to multiple tools to help you fulfill requests:\n\nAvailability: Use this tool for checking available times for appointment.\n\nAppointments: Use this tool to create the appointment.\n\nVector Store Tool: Use this tool to retrieve information about anything related to the Tech-Discovery-Hub Community\n\nGoogle Sheets: Use this tool to store customer's contact information\n\nSerpAPI: Use this tool for general information to fetch results from Google Search.\n\nWhen a task requires using one or more of these tools, make sure to identify which tool is most appropriate, pass along the relevant details, and execute the actions needed to complete the task. Your goal is to be proactive, precise, and organized in managing these resources to provide a smooth experience for the user.\n\nKeep responses concise, short, and relevant to the user's question.\n\nHere is the current time/date: {{ $now.format('DD')}}\n\nDO NOT PROVIDE ANY EXISTING MEETING DETAILS"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -60,
+        -100
+      ],
+      "id": "f87dfe7e-ab64-428c-9f5a-5f32dc3c5ebe",
+      "name": "Tools AI-Agent"
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "n8n-voice-agent",
+          "mode": "list",
+          "cachedResultName": "n8n-voice-agent"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.1,
+      "position": [
+        280,
+        360
+      ],
+      "id": "b5955576-83cd-487a-848c-96703d8a38bb",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "E0XQ2MYr67ZLdhVO",
+          "name": "PineconeApi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Tools AI-Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Tools AI-Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tools AI-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appointments": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tools AI-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Availability": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tools AI-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tools AI-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tools AI-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Vector Store Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tools AI-Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector Store Tool",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e64de136-88fc-4100-a323-9f455c1dad7c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3f21aaf8491157c44331f10f943768229b6695aa90fd86fc40ddb60f0a283c31"
+  },
+  "id": "OlZUopoYeW9a1uIQ",
+  "tags": [
+    {
+      "createdAt": "2025-06-05T06:58:59.412Z",
+      "updatedAt": "2025-06-05T06:58:59.412Z",
+      "id": "Ba1Vyb7BJb8L5WK7",
+      "name": "ET"
+    },
+    {
+      "createdAt": "2025-06-05T06:58:59.444Z",
+      "updatedAt": "2025-06-05T06:58:59.444Z",
+      "id": "IkoJWBxO2KOLpNNX",
+      "name": "From POC sheet"
+    }
+  ]
+}
