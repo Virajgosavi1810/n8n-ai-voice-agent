@@ -3,11 +3,7 @@
 
 ![n8n](https://img.shields.io/badge/n8n-Automation-FF6D5A?style=for-the-badge)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=for-the-badge)
-![Pinecone](https://img.shields.io/badge/Pinecone-Vector%20Database-0F9D58?style=for-the-badge)
-![Google Calendar](https://img.shields.io/badge/Google-Calendar-4285F4?style=for-the-badge)
 ![Google Sheets](https://img.shields.io/badge/Google-Sheets-34A853?style=for-the-badge)
-![SerpAPI](https://img.shields.io/badge/SerpAPI-Google%20Search-blue?style=for-the-badge)
-![AI Agent](https://img.shields.io/badge/AI-Agent-success?style=for-the-badge)
 ![RAG](https://img.shields.io/badge/RAG-Vector%20Search-purple?style=for-the-badge)
 
 ---
