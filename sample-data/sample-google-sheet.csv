@@ -1,0 +1,4 @@
+Timestamp,User Name,User Query,AI Response,Appointment Date,Appointment Time,Status
+2026-07-19 10:15,John Doe,Book appointment tomorrow,Appointment booked successfully,2026-07-20,3:00 PM,Confirmed
+2026-07-19 11:20,Alice Smith,Search AI news,Displayed latest AI news...,,,Completed
+2026-07-19 12:45,Bob Lee,What are your business hours?,Business hours are 9 AM - 6 PM...,,,Answered
