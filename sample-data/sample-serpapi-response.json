@@ -1,0 +1,10 @@
+{
+    "query":"Latest AI News",
+    "results":[
+        {
+            "title":"Top AI Trends in 2026",
+            "url":"https://example.com",
+            "snippet":"Artificial Intelligence continues to evolve rapidly..."
+        }
+    ]
+}
